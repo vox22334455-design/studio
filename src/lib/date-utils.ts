@@ -1,4 +1,3 @@
-
 /**
  * نظام إدارة الوقت والتاريخ لتطبيق رمضان 2026
  * يحدد مراحل التطبيق تلقائياً بناءً على التاريخ الحالي لعام 2026.
@@ -43,13 +42,33 @@ export interface PrayerTimes {
   Isha: string;
 }
 
+/**
+ * حساب مواقيت الصلاة بشكل تقريبي بناءً على الموقع.
+ * في التطبيق الحقيقي يفضل استخدام مكتبة مثل 'adhan' أو API خارجي.
+ * هنا نقوم بتعديل التوقيت بناءً على خط الطول (كل 15 درجة تساوي ساعة).
+ */
 export function calculatePrayerTimes(lat?: number, lon?: number): PrayerTimes {
-  // محاكاة لمواقيت الصلاة في مكة المكرمة لعام 2026
+  // التوقيت الافتراضي لمكة المكرمة
+  let baseMaghribMinutes = 18 * 60 + 38; // 18:38
+  
+  if (lon !== undefined) {
+    // تعديل تقريبي: خط طول مكة هو 39.8. الفرق في خط الطول يؤثر على الوقت.
+    // كل درجة واحدة فرق تساوي 4 دقائق تقريباً.
+    const lonDiff = lon - 39.82;
+    baseMaghribMinutes += Math.round(lonDiff * 4);
+  }
+
+  const formatTime = (totalMinutes: number) => {
+    const h = Math.floor(totalMinutes / 60) % 24;
+    const m = Math.abs(totalMinutes % 60);
+    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+  };
+
   return {
-    Fajr: "05:12",
+    Fajr: formatTime(baseMaghribMinutes - 13 * 60 - 26), // تقريباً قبل المغرب بـ 13 ساعة
     Dhuhr: "12:24",
     Asr: "15:48",
-    Maghrib: "18:38",
-    Isha: "20:08"
+    Maghrib: formatTime(baseMaghribMinutes),
+    Isha: formatTime(baseMaghribMinutes + 90) // العشاء بعد المغرب بـ 90 دقيقة
   };
 }
