@@ -19,25 +19,34 @@ export function AmbiencePlayer() {
     const times = calculatePrayerTimes();
     setNextMaghrib(times.Maghrib);
 
-    // تفقد وقت أذان المغرب كل دقيقة لإرسال التنبيه
+    // تفقد الوقت كل دقيقة لإدارة التنبيهات والأذان
     const interval = setInterval(() => {
       const now = new Date();
-      const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+      const currentH = now.getHours().toString().padStart(2, '0');
+      const currentM = now.getMinutes().toString().padStart(2, '0');
+      const currentTime = `${currentH}:${currentM}`;
       
-      // حساب 15 دقيقة قبل المغرب (تبسيط للمحاكاة)
-      if (currentTime === "18:09") { // مثال إذا كان المغرب 18:24
+      // منطق تذكير 15 دقيقة قبل المغرب
+      const [maghribH, maghribM] = times.Maghrib.split(':').map(Number);
+      const maghribTotalMinutes = maghribH * 60 + maghribM;
+      const currentTotalMinutes = now.getHours() * 60 + now.getMinutes();
+      
+      if (maghribTotalMinutes - currentTotalMinutes === 15) {
         toast({
-          title: "تذكير صائم",
+          title: "تذكير صائم 🌙",
           description: "تبقى 15 دقيقة على أذان المغرب — لا تنسَ دعاء اليوم.",
           duration: 10000,
         });
       }
 
-      // وقت الأذان الفعلي
+      // تشغيل أذان المغرب تلقائياً إذا كان مفعل
       if (isAdhanEnabled && currentTime === times.Maghrib) {
         if (adhanRef.current) {
-           adhanRef.current.play();
-           toast({ title: "حان الآن أذان المغرب", description: "أذان الحرم المكي الشريف" });
+           adhanRef.current.play().catch(e => console.log("Adhan play blocked:", e));
+           toast({ 
+             title: "حان الآن أذان المغرب", 
+             description: "أذان الحرم المكي الشريف - تقبل الله صيامكم." 
+           });
         }
       }
     }, 60000);
@@ -56,7 +65,7 @@ export function AmbiencePlayer() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
+    <div className="fixed bottom-6 left-6 flex flex-col gap-3 z-50 rtl:left-auto rtl:right-6">
       <audio
         ref={audioRef}
         loop
@@ -67,36 +76,38 @@ export function AmbiencePlayer() {
         src="https://www.islamcan.com/audio/adhan/makkah.mp3" 
       />
       
-      <div className="bg-primary/80 backdrop-blur-md p-3 rounded-2xl border border-accent/20 text-accent text-xs mb-2 shadow-2xl animate-in slide-in-from-right">
-        <div className="flex items-center gap-2 mb-1">
-          <MapPin size={12} />
+      <div className="bg-primary/90 backdrop-blur-xl p-4 rounded-2xl border border-accent/30 text-accent text-xs mb-2 shadow-2xl animate-in slide-in-from-bottom-4">
+        <div className="flex items-center gap-2 mb-2 font-bold">
+          <MapPin size={14} />
           <span>مكة المكرمة (افتراضي)</span>
         </div>
-        <div className="flex items-center gap-2">
-          <Bell size={12} />
-          <span>المغرب: {nextMaghrib}</span>
+        <div className="flex items-center gap-2 text-white/90">
+          <Bell size={14} className="text-accent" />
+          <span>المغرب المتوقع: <span className="font-bold text-accent">{nextMaghrib}</span></span>
         </div>
       </div>
 
-      <Button
-        onClick={toggleAmbience}
-        variant="secondary"
-        size="icon"
-        className="rounded-full shadow-2xl bg-accent text-primary hover:bg-accent/90 w-12 h-12"
-        title="أجواء روحانية"
-      >
-        <Music className={isPlaying ? "animate-pulse" : ""} />
-      </Button>
+      <div className="flex gap-3">
+        <Button
+          onClick={toggleAmbience}
+          variant="secondary"
+          size="icon"
+          className="rounded-full shadow-2xl bg-accent text-primary hover:bg-accent/90 w-14 h-14"
+          title="أجواء روحانية"
+        >
+          <Music className={isPlaying ? "animate-pulse" : ""} size={24} />
+        </Button>
 
-      <Button
-        onClick={() => setIsAdhanEnabled(!isAdhanEnabled)}
-        variant="secondary"
-        size="icon"
-        className="rounded-full shadow-2xl bg-accent text-primary hover:bg-accent/90 w-12 h-12"
-        title={isAdhanEnabled ? "إيقاف الأذان" : "تشغيل الأذان"}
-      >
-        {isAdhanEnabled ? <Volume2 /> : <VolumeX />}
-      </Button>
+        <Button
+          onClick={() => setIsAdhanEnabled(!isAdhanEnabled)}
+          variant="secondary"
+          size="icon"
+          className="rounded-full shadow-2xl bg-accent text-primary hover:bg-accent/90 w-14 h-14"
+          title={isAdhanEnabled ? "إيقاف الأذان" : "تشغيل الأذان"}
+        >
+          {isAdhanEnabled ? <Volume2 size={24} /> : <VolumeX size={24} />}
+        </Button>
+      </div>
     </div>
   );
 }

@@ -11,6 +11,7 @@ interface PhaseIntroProps {
 export function PhaseIntro({ onEnter }: PhaseIntroProps) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-gradient-to-b from-[#192375] via-[#121a5a] to-[#0a0f3d] relative overflow-hidden">
+      {/* نجوم متحركة في الخلفية */}
       <div className="absolute inset-0 pointer-events-none">
         {[...Array(25)].map((_, i) => (
           <Star
@@ -46,8 +47,8 @@ export function PhaseIntro({ onEnter }: PhaseIntroProps) {
         <div className="space-y-4 py-6">
           <div className="text-accent font-bold text-lg tracking-widest uppercase">إهداء من:</div>
           <div className="space-y-1">
-            <p className="text-2xl font-headline">المستشار الاقتصادي محمد الحليبي</p>
-            <p className="text-2xl font-headline">وزوجته الدكتورة سحر عبد الفتاح أبو حسين</p>
+            <p className="text-2xl font-headline text-white">المستشار الاقتصادي محمد الحليبي</p>
+            <p className="text-2xl font-headline text-white">وزوجته الدكتورة سحر عبد الفتاح أبو حسين</p>
           </div>
           
           <div className="bg-accent/10 border-2 border-accent text-accent py-3 px-8 rounded-full inline-block mt-6 font-bold text-xl animate-pulse">

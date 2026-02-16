@@ -24,7 +24,7 @@
     --border: 225 35% 85%;
     --input: 225 35% 85%;
     --ring: 233 65% 28%;
-    --radius: 1rem;
+    --radius: 1.5rem;
   }
 }
 
@@ -33,10 +33,9 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-body antialiased;
+    @apply bg-[#192375] text-white font-body antialiased;
     min-height: 100vh;
     background: linear-gradient(to bottom, #192375, #0a0f3d);
-    color: white;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-headline;
@@ -46,19 +45,20 @@
 .islamic-border {
   border: 4px double #D4A24E;
   position: relative;
-  box-shadow: 0 0 40px rgba(0,0,0,0.3);
+  box-shadow: 0 0 40px rgba(0,0,0,0.4);
 }
 
 .islamic-border::before {
   content: "☪";
   position: absolute;
-  top: -15px;
+  top: -18px;
   left: 50%;
   transform: translateX(-50%);
   background: #192375;
-  padding: 0 10px;
+  padding: 0 12px;
   color: #D4A24E;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+  z-index: 10;
 }
 
 .star-animation {
@@ -82,4 +82,14 @@
 /* تحسينات لبطاقات الدعاء */
 .dua-card-gradient {
   background: linear-gradient(135deg, rgba(25, 35, 117, 0.95) 0%, rgba(18, 26, 90, 0.95) 100%);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-accent/30 rounded-full;
 }
