@@ -42,7 +42,8 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-body antialiased min-h-screen;
+    @apply bg-background text-foreground font-body antialiased;
+    min-height: 100vh;
     background: linear-gradient(to bottom, #192375, #121a5a);
     color: white;
   }

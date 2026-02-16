@@ -3,9 +3,10 @@
 import { RAMADAN_DUAS } from "@/lib/dua-data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, ChevronLeft, RotateCcw, Star, Share2 } from "lucide-react";
-import { useState } from "react";
+import { ChevronRight, ChevronLeft, RotateCcw, Star, Share2, Volume2, Loader2 } from "lucide-react";
+import { useState, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { generateDuaAudio } from "@/ai/flows/dua-tts-flow";
 
 interface DuaCardProps {
   currentDay: number;
@@ -13,6 +14,9 @@ interface DuaCardProps {
 
 export function DuaCard({ currentDay }: DuaCardProps) {
   const [viewedDay, setViewedDay] = useState(currentDay);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoadingAudio, setIsLoadingAudio] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const { toast } = useToast();
 
   const goToNext = () => setViewedDay((prev) => Math.min(prev + 1, 30));
@@ -20,6 +24,33 @@ export function DuaCard({ currentDay }: DuaCardProps) {
   const goToCurrent = () => setViewedDay(currentDay);
 
   const duaText = RAMADAN_DUAS[viewedDay - 1];
+
+  const handleListen = async () => {
+    if (isPlaying) {
+      audioRef.current?.pause();
+      setIsPlaying(false);
+      return;
+    }
+
+    setIsLoadingAudio(true);
+    try {
+      const { audioUri } = await generateDuaAudio(duaText);
+      if (audioRef.current) {
+        audioRef.current.src = audioUri;
+        audioRef.current.play();
+        setIsPlaying(true);
+      }
+    } catch (error) {
+      console.error("TTS Error:", error);
+      toast({
+        variant: "destructive",
+        title: "خطأ في الصوت",
+        description: "عذراً، لم نتمكن من تشغيل القراءة الصوتية حالياً.",
+      });
+    } finally {
+      setIsLoadingAudio(false);
+    }
+  };
 
   const handleShare = async () => {
     const textToShare = `🌙 *دعاء اليوم ${viewedDay} من رمضان* 🌙\n\n"${duaText}"\n\n✨ *تقبل الله منا ومنكم صالح الأعمال*\n📥 تمت المشاركة من تطبيق أدعية رمضان المبارك - صدقة جارية.`;
@@ -44,6 +75,12 @@ export function DuaCard({ currentDay }: DuaCardProps) {
 
   return (
     <div className="max-w-xl mx-auto px-4 py-4 w-full">
+      <audio 
+        ref={audioRef} 
+        onEnded={() => setIsPlaying(false)} 
+        className="hidden"
+      />
+      
       <Card className="islamic-border overflow-hidden bg-gradient-to-br from-[#192375] to-[#121a5a] text-white border-accent shadow-2xl transition-all">
         <CardHeader className="text-center pb-2 border-b border-accent/20">
           <div className="flex justify-between items-center mb-2">
@@ -57,7 +94,16 @@ export function DuaCard({ currentDay }: DuaCardProps) {
                 <Share2 size={20} />
               </Button>
               <Star size={32} className="star-animation fill-accent text-accent" />
-              <div className="w-10" />
+              <Button
+                onClick={handleListen}
+                disabled={isLoadingAudio}
+                variant="ghost"
+                size="icon"
+                className="text-accent hover:text-accent/80 hover:bg-accent/10 rounded-full"
+                title="استماع للدعاء"
+              >
+                {isLoadingAudio ? <Loader2 className="animate-spin" size={20} /> : <Volume2 className={isPlaying ? "animate-pulse" : ""} size={20} />}
+              </Button>
           </div>
           <CardTitle className="text-4xl font-headline text-accent">اليوم {viewedDay}</CardTitle>
           <div className="h-px bg-accent/30 w-1/2 mx-auto mt-4" />

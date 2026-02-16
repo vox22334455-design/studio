@@ -18,28 +18,38 @@ export default function Home() {
   const [currentDay, setCurrentDay] = useState(1);
   const { toast } = useToast();
 
-  useEffect(() => {
+  const updateAppData = () => {
     const now = new Date();
     const detectedPhase = getCurrentPhase(now);
-    setCurrentDay(getRamadanDay(now));
-
-    const timer = setTimeout(() => {
-      setPhase(detectedPhase);
-    }, 800);
-
-    if (detectedPhase === 'RAMADAN') {
-      const maghribToastTimer = setTimeout(() => {
-        toast({
-          title: "تذكير قبل المغرب",
-          description: "تبقى 15 دقيقة على أذان المغرب — لا تنسَ دعاء اليوم",
-          action: <Bell className="text-accent" />
-        });
-      }, 5000);
-      return () => clearTimeout(maghribToastTimer);
+    const day = getRamadanDay(now);
+    
+    setCurrentDay(day);
+    
+    // Auto-transition to RAMADAN if it's currently Ramadan
+    if (phase === 'SPLASH' || (phase === 'INTRO' && detectedPhase === 'RAMADAN')) {
+       setPhase(detectedPhase);
     }
+  };
 
-    return () => clearTimeout(timer);
-  }, [toast]);
+  useEffect(() => {
+    // Initial update
+    updateAppData();
+    
+    const splashTimer = setTimeout(() => {
+      if (phase === 'SPLASH') {
+        const now = new Date();
+        setPhase(getCurrentPhase(now));
+      }
+    }, 1500);
+
+    // Auto-refresh every 10 minutes to keep the day updated automatically
+    const interval = setInterval(updateAppData, 600000);
+
+    return () => {
+      clearTimeout(splashTimer);
+      clearInterval(interval);
+    };
+  }, [phase]);
 
   const handleEnter = () => {
     setPhase('RAMADAN');
