@@ -18,7 +18,6 @@ export function AmbiencePlayer() {
   const { toast } = useToast();
 
   useEffect(() => {
-    // محاولة الحصول على موقع المستخدم
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -30,12 +29,11 @@ export function AmbiencePlayer() {
           
           toast({
             title: "تم تحديد الموقع",
-            description: "تم تحديث مواقيت الصلاة حسب موقعك الحالي بنجاح.",
+            description: "تم تحديث مواقيت الصلوات الخمس حسب موقعك الحالي بنجاح.",
           });
         },
         (error) => {
           console.error("Geolocation error:", error);
-          // في حال الرفض نستخدم مكة المكرمة كافتراضي
           const times = calculatePrayerTimes();
           setPrayerTimes(times);
           setLocationName("مكة المكرمة (افتراضي)");
@@ -44,7 +42,7 @@ export function AmbiencePlayer() {
           toast({
             variant: "destructive",
             title: "تعذر تحديد الموقع",
-            description: "تم اعتماد توقيت مكة المكرمة كخيار افتراضي.",
+            description: "تم اعتماد توقيت الحرم المكي الشريف كخيار افتراضي.",
           });
         }
       );
@@ -65,28 +63,39 @@ export function AmbiencePlayer() {
       const currentM = now.getMinutes().toString().padStart(2, '0');
       const currentTime = `${currentH}:${currentM}`;
       
+      const prayers = [
+        { name: "الفجر", time: prayerTimes.Fajr },
+        { name: "الظهر", time: prayerTimes.Dhuhr },
+        { name: "العصر", time: prayerTimes.Asr },
+        { name: "المغرب", time: prayerTimes.Maghrib },
+        { name: "العشاء", name_ar: "العشاء", time: prayerTimes.Isha },
+      ];
+
+      // تحقق من موعد كل صلاة
+      prayers.forEach(prayer => {
+        if (isAdhanEnabled && currentTime === prayer.time) {
+          if (adhanRef.current && adhanRef.current.paused) {
+             adhanRef.current.play().catch(e => console.log("Adhan play blocked:", e));
+             toast({ 
+               title: `حان الآن وقت صلاة ${prayer.name}`, 
+               description: "أذان الحرم المكي الشريف - تقبل الله منكم.",
+               duration: 20000,
+             });
+          }
+        }
+      });
+
+      // تنبيه خاص قبل المغرب بـ 15 دقيقة (للصائمين)
       const [maghribH, maghribM] = prayerTimes.Maghrib.split(':').map(Number);
       const maghribTotalMinutes = maghribH * 60 + maghribM;
       const currentTotalMinutes = now.getHours() * 60 + now.getMinutes();
       
-      // تنبيه قبل المغرب بـ 15 دقيقة
       if (maghribTotalMinutes - currentTotalMinutes === 15) {
         toast({
           title: "تذكير صائم 🌙",
           description: "تبقى 15 دقيقة على أذان المغرب — لا تنسَ دعاء اليوم.",
           duration: 10000,
         });
-      }
-
-      // تشغيل الأذان في وقت المغرب
-      if (isAdhanEnabled && currentTime === prayerTimes.Maghrib) {
-        if (adhanRef.current && adhanRef.current.paused) {
-           adhanRef.current.play().catch(e => console.log("Adhan play blocked:", e));
-           toast({ 
-             title: "حان الآن أذان المغرب", 
-             description: "أذان الحرم المكي الشريف - تقبل الله صيامكم." 
-           });
-        }
       }
     }, 60000);
 
@@ -120,9 +129,23 @@ export function AmbiencePlayer() {
           {isLocating ? <Loader2 size={14} className="animate-spin" /> : <MapPin size={14} />}
           <span>{locationName}</span>
         </div>
-        <div className="flex items-center gap-2 text-white/90">
-          <Bell size={14} className="text-accent" />
-          <span>المغرب المتوقع: <span className="font-bold text-accent">{prayerTimes?.Maghrib || "--:--"}</span></span>
+        <div className="grid grid-cols-2 gap-2 text-white/90">
+          <div className="flex items-center gap-1">
+            <span className="text-accent">الفجر:</span>
+            <span>{prayerTimes?.Fajr || "--:--"}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="text-accent">الظهر:</span>
+            <span>{prayerTimes?.Dhuhr || "--:--"}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="text-accent">العصر:</span>
+            <span>{prayerTimes?.Asr || "--:--"}</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <span className="text-accent font-bold">المغرب:</span>
+            <span className="font-bold text-accent">{prayerTimes?.Maghrib || "--:--"}</span>
+          </div>
         </div>
       </div>
 
