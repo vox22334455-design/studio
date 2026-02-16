@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,7 @@ export function PhaseEid() {
     if (isPlayingTakbirat) {
       audioRef.current.pause();
     } else {
-      audioRef.current.play();
+      audioRef.current.play().catch(e => console.log("Play failed", e));
     }
     setIsPlayingTakbirat(!isPlayingTakbirat);
   };
@@ -23,7 +24,7 @@ export function PhaseEid() {
       <audio 
         ref={audioRef}
         loop
-        src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" // Placeholder for Takbirat
+        src="https://www.islamcan.com/audio/takbeer/takbeer1.mp3"
       />
       
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -64,7 +65,7 @@ export function PhaseEid() {
               {isPlayingTakbirat ? "إيقاف التكبيرات" : "تشغيل التكبيرات"}
             </Button>
             {isPlayingTakbirat && (
-              <p className="mt-4 animate-pulse italic text-accent">الله أكبر.. الله أكبر.. لا إله إلا الله</p>
+              <p className="mt-4 animate-pulse italic text-accent font-arabic">الله أكبر.. الله أكبر.. لا إله إلا الله</p>
             )}
           </div>
 

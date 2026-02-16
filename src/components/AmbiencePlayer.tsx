@@ -66,7 +66,7 @@ export function AmbiencePlayer() {
       <audio
         ref={audioRef}
         loop
-        src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" 
+        src="https://www.islamcan.com/audio/anasheed/ramadan.mp3" 
       />
       <audio
         ref={adhanRef}
