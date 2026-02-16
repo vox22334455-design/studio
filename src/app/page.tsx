@@ -59,17 +59,16 @@ export default function Home() {
       {phase === 'INTRO' && (
         <div className="animate-in fade-in duration-1000">
           <PhaseIntro onEnter={handleEnter} />
-          <ShareQRCode />
         </div>
       )}
 
       {phase === 'RAMADAN' && (
         <div className="min-h-screen py-12 flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-700">
           <div className="text-center mb-10 px-4 max-w-2xl mx-auto w-full">
-            <h1 className="text-4xl md:text-6xl font-headline text-accent mb-6 font-bold drop-shadow-lg">أدعية رمضان المبارك</h1>
+            <h1 className="text-4xl md:text-6xl font-headline text-accent mb-6 font-bold drop-shadow-lg text-center w-full">أدعية رمضان المبارك</h1>
             <div className="space-y-4">
                <p className="text-2xl text-white/90">اليوم <span className="text-accent font-bold">{currentDay}</span> من الشهر الفضيل</p>
-               <div className="px-10 mt-6">
+               <div className="px-10 mt-6 max-w-md mx-auto">
                   <Progress value={ramadanProgress} className="h-3 bg-white/10 border border-white/5" />
                   <p className="text-sm text-accent/70 mt-3 font-medium">انقضى {Math.floor(ramadanProgress)}% من رمضان 2026</p>
                </div>
@@ -85,7 +84,6 @@ export default function Home() {
             <p className="text-xs mt-2 tracking-widest uppercase">Version 1.46.2026 - OS Firas</p>
           </div>
           <AmbiencePlayer />
-          <ShareQRCode />
         </div>
       )}
 
@@ -93,7 +91,6 @@ export default function Home() {
         <div className="animate-in zoom-in duration-1000">
           <PhaseEid />
           <AmbiencePlayer />
-          <ShareQRCode />
         </div>
       )}
 
@@ -102,6 +99,10 @@ export default function Home() {
           <PhaseClosing />
         </div>
       )}
+
+      {/* ShareQRCode is placed at the end to ensure it's on top and globally available */}
+      {phase !== 'SPLASH' && <ShareQRCode />}
+      
       <Toaster />
     </main>
   );
