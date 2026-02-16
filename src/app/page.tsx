@@ -26,12 +26,10 @@ export default function Home() {
   };
 
   useEffect(() => {
-    // محاكاة تحميل بسيطة
     const timer = setTimeout(() => {
       updateAppData();
     }, 1500);
 
-    // تحديث تلقائي كل دقيقة لضمان الانتقال الفوري بين المراحل
     const interval = setInterval(updateAppData, 60000);
 
     return () => {
@@ -52,7 +50,7 @@ export default function Home() {
         <div className="min-h-screen flex items-center justify-center bg-[#192375] z-50 fixed inset-0">
           <div className="text-center">
             <div className="w-20 h-20 border-4 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-6" />
-            <h2 className="text-accent animate-pulse text-2xl font-headline">اللهم بلغنا رمضان...</h2>
+            <h2 className="text-accent animate-pulse text-2xl font-headline">اللهم بلغنا رمضان 2026...</h2>
           </div>
         </div>
       )}
@@ -71,7 +69,7 @@ export default function Home() {
                <p className="text-2xl text-white/90">اليوم <span className="text-accent font-bold">{currentDay}</span> من الشهر الفضيل</p>
                <div className="px-10 mt-6">
                   <Progress value={ramadanProgress} className="h-3 bg-white/10 border border-white/5" />
-                  <p className="text-sm text-accent/70 mt-3 font-medium">انقضى {Math.floor(ramadanProgress)}% من رمضان</p>
+                  <p className="text-sm text-accent/70 mt-3 font-medium">انقضى {Math.floor(ramadanProgress)}% من رمضان 2026</p>
                </div>
             </div>
           </div>
@@ -82,7 +80,7 @@ export default function Home() {
           
           <div className="mt-20 text-center p-8 opacity-40 border-t border-white/5 max-w-md mx-auto">
             <p className="text-lg">جميع الحقوق محفوظة لمنظومة الحليبي</p>
-            <p className="text-xs mt-2 tracking-widest uppercase">Version 1.46.2025 - OS Firas</p>
+            <p className="text-xs mt-2 tracking-widest uppercase">Version 1.46.2026 - OS Firas</p>
           </div>
           <AmbiencePlayer />
         </div>

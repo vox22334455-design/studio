@@ -81,7 +81,7 @@ export function PhaseClosing() {
              <Globe size={20} className="text-accent" />
              <span>Industrial Vision … Global Presence</span>
           </div>
-          <p className="text-xs tracking-widest uppercase font-medium">جميع الحقوق محفوظة لمنظومة الحليبي فرس OS © 2025</p>
+          <p className="text-xs tracking-widest uppercase font-medium">جميع الحقوق محفوظة لمنظومة الحليبي فرس OS © 2026</p>
         </div>
       </div>
     </div>
