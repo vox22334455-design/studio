@@ -33,8 +33,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-[#192375] text-white font-body antialiased;
-    min-height: 100vh;
+    @apply bg-[#192375] text-white font-body antialiased min-h-screen;
     background: linear-gradient(to bottom, #192375, #0a0f3d);
   }
   h1, h2, h3, h4, h5, h6 {
@@ -79,7 +78,6 @@
   font-family: 'Alegreya', serif;
 }
 
-/* تحسينات لبطاقات الدعاء */
 .dua-card-gradient {
   background: linear-gradient(135deg, rgba(25, 35, 117, 0.95) 0%, rgba(18, 26, 90, 0.95) 100%);
 }

@@ -22,20 +22,17 @@ export default function Home() {
     const day = getRamadanDay(now);
     
     setCurrentDay(day);
-    
-    // إذا كان رمضان قد بدأ فعلاً، نتخطى شاشة البداية في المرات القادمة
-    if (phase === 'SPLASH') {
-       setPhase(detectedPhase);
-    }
+    setPhase(detectedPhase);
   };
 
   useEffect(() => {
+    // محاكاة تحميل بسيطة
     const timer = setTimeout(() => {
       updateAppData();
     }, 1500);
 
-    // التحديث التلقائي كل 10 دقائق لليوم والمرحلة
-    const interval = setInterval(updateAppData, 600000);
+    // تحديث تلقائي كل دقيقة لضمان الانتقال الفوري بين المراحل
+    const interval = setInterval(updateAppData, 60000);
 
     return () => {
       clearTimeout(timer);

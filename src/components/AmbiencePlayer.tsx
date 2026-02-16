@@ -19,14 +19,12 @@ export function AmbiencePlayer() {
     const times = calculatePrayerTimes();
     setNextMaghrib(times.Maghrib);
 
-    // تفقد الوقت كل دقيقة لإدارة التنبيهات والأذان
     const interval = setInterval(() => {
       const now = new Date();
       const currentH = now.getHours().toString().padStart(2, '0');
       const currentM = now.getMinutes().toString().padStart(2, '0');
       const currentTime = `${currentH}:${currentM}`;
       
-      // منطق تذكير 15 دقيقة قبل المغرب
       const [maghribH, maghribM] = times.Maghrib.split(':').map(Number);
       const maghribTotalMinutes = maghribH * 60 + maghribM;
       const currentTotalMinutes = now.getHours() * 60 + now.getMinutes();
@@ -39,7 +37,6 @@ export function AmbiencePlayer() {
         });
       }
 
-      // تشغيل أذان المغرب تلقائياً إذا كان مفعل
       if (isAdhanEnabled && currentTime === times.Maghrib) {
         if (adhanRef.current) {
            adhanRef.current.play().catch(e => console.log("Adhan play blocked:", e));

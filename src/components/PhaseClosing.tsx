@@ -22,7 +22,6 @@ export function PhaseClosing() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-[#0a0f3d] text-white selection:bg-accent selection:text-primary relative overflow-hidden">
-      {/* عناصر زخرفية في الخلفية */}
       <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent rounded-full blur-[150px]" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-600 rounded-full blur-[150px]" />

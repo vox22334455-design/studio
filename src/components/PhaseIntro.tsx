@@ -11,7 +11,6 @@ interface PhaseIntroProps {
 export function PhaseIntro({ onEnter }: PhaseIntroProps) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-gradient-to-b from-[#192375] via-[#121a5a] to-[#0a0f3d] relative overflow-hidden">
-      {/* نجوم متحركة في الخلفية */}
       <div className="absolute inset-0 pointer-events-none">
         {[...Array(25)].map((_, i) => (
           <Star
