@@ -4,8 +4,9 @@
 import { RAMADAN_DUAS } from "@/lib/dua-data";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, ChevronLeft, RotateCcw, Star } from "lucide-react";
-import { useState, useEffect } from "react";
+import { ChevronRight, ChevronLeft, RotateCcw, Star, Share2 } from "lucide-react";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 interface DuaCardProps {
   currentDay: number;
@@ -13,6 +14,7 @@ interface DuaCardProps {
 
 export function DuaCard({ currentDay }: DuaCardProps) {
   const [viewedDay, setViewedDay] = useState(currentDay);
+  const { toast } = useToast();
 
   const goToNext = () => setViewedDay((prev) => Math.min(prev + 1, 30));
   const goToPrev = () => setViewedDay((prev) => Math.max(prev - 1, 1));
@@ -20,12 +22,44 @@ export function DuaCard({ currentDay }: DuaCardProps) {
 
   const duaText = RAMADAN_DUAS[viewedDay - 1];
 
+  const handleShare = async () => {
+    const textToShare = `دعاء اليوم ${viewedDay} من رمضان:\n\n${duaText}\n\nتمت المشاركة من تطبيق أدعية رمضان المبارك - صدقة جارية.`;
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'دعاء رمضان',
+          text: textToShare,
+        });
+      } catch (err) {
+        console.error("Share failed", err);
+      }
+    } else {
+      // Fallback to clipboard
+      navigator.clipboard.writeText(textToShare);
+      toast({
+        title: "تم النسخ!",
+        description: "تم نسخ الدعاء إلى الحافظة لمشاركته.",
+      });
+    }
+  };
+
   return (
-    <div className="max-w-xl mx-auto px-4 py-8">
+    <div className="max-w-xl mx-auto px-4 py-4">
       <Card className="islamic-border overflow-hidden bg-gradient-to-br from-[#192375] to-[#121a5a] text-white border-accent shadow-2xl">
         <CardHeader className="text-center pb-2 border-b border-accent/20">
-          <div className="flex justify-center mb-4 text-accent">
-            <Star size={32} className="star-animation fill-accent" />
+          <div className="flex justify-between items-center mb-2">
+             <Button
+                onClick={handleShare}
+                variant="ghost"
+                size="icon"
+                className="text-accent hover:text-accent/80 hover:bg-accent/10 rounded-full"
+                title="مشاركة الدعاء"
+              >
+                <Share2 size={20} />
+              </Button>
+              <Star size={32} className="star-animation fill-accent text-accent" />
+              <div className="w-10" /> {/* Spacer */}
           </div>
           <CardTitle className="text-4xl font-headline text-accent">اليوم {viewedDay}</CardTitle>
           <div className="h-px bg-accent/30 w-1/2 mx-auto mt-4" />
@@ -52,7 +86,7 @@ export function DuaCard({ currentDay }: DuaCardProps) {
               className="bg-accent text-primary hover:bg-accent/90 font-bold px-6 flex items-center gap-2"
             >
               <RotateCcw size={18} />
-              العودة لليوم الحالي
+              <span className="hidden sm:inline">العودة لليوم الحالي</span>
             </Button>
 
             <Button
