@@ -52,7 +52,7 @@ export function ShareQRCode() {
             <DialogHeader className="w-full">
               <DialogTitle className="text-center text-2xl md:text-3xl font-headline text-accent flex items-center justify-center gap-3">
                 <Share2 size={28} />
-                <span>شارك الأجر 🌙</span>
+                <span>Ramdan Mubarak</span>
               </DialogTitle>
               <div className="h-px bg-accent/30 w-1/2 mx-auto mt-4" />
             </DialogHeader>
@@ -71,7 +71,7 @@ export function ShareQRCode() {
 
             <div className="text-center space-y-4 w-full px-4">
               <p className="text-sm arabic-text text-white/90 leading-relaxed">
-                امسح الكود أو انسخ الرابط لمشاركة التطبيق كصدقة جارية.
+                Ramdan Mubarak - شارك الأجر كصدقة جارية
               </p>
               
               <div className="flex items-center gap-2 bg-primary/40 p-3 rounded-2xl border border-accent/20">

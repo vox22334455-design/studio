@@ -51,7 +51,7 @@ export default function Home() {
         <div className="min-h-screen flex items-center justify-center bg-[#192375] z-50 fixed inset-0">
           <div className="text-center">
             <div className="w-20 h-20 border-4 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-6" />
-            <h2 className="text-accent animate-pulse text-2xl font-headline">اللهم بلغنا رمضان 2026...</h2>
+            <h2 className="text-accent animate-pulse text-2xl font-headline">Ramdan Mubarak 2026...</h2>
           </div>
         </div>
       )}
@@ -65,7 +65,7 @@ export default function Home() {
       {phase === 'RAMADAN' && (
         <div className="min-h-screen py-12 flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-700">
           <div className="text-center mb-10 px-4 max-w-2xl mx-auto w-full">
-            <h1 className="text-4xl md:text-6xl font-headline text-accent mb-6 font-bold drop-shadow-lg text-center w-full">أدعية رمضان المبارك</h1>
+            <h1 className="text-4xl md:text-6xl font-headline text-accent mb-6 font-bold drop-shadow-lg text-center w-full">Ramdan Mubarak</h1>
             <div className="space-y-4">
                <p className="text-2xl text-white/90">اليوم <span className="text-accent font-bold">{currentDay}</span> من الشهر الفضيل</p>
                <div className="px-10 mt-6 max-w-md mx-auto">
@@ -77,7 +77,9 @@ export default function Home() {
           
           <DuaCard currentDay={currentDay} />
           
-          <TasbihCounter />
+          <div className="mt-8">
+            <TasbihCounter />
+          </div>
           
           <div className="mt-20 text-center p-8 opacity-40 border-t border-white/5 max-w-md mx-auto">
             <p className="text-lg">جميع الحقوق محفوظة لمنظومة الحليبي</p>
