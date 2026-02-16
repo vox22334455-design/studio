@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
@@ -21,32 +20,20 @@ export default function Home() {
     const now = new Date();
     const detectedPhase = getCurrentPhase(now);
     const day = getRamadanDay(now);
-    
     setCurrentDay(day);
     setPhase(detectedPhase);
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      updateAppData();
-    }, 1500);
-
+    const timer = setTimeout(() => { updateAppData(); }, 1500);
     const interval = setInterval(updateAppData, 60000);
-
-    return () => {
-      clearTimeout(timer);
-      clearInterval(interval);
-    };
+    return () => { clearTimeout(timer); clearInterval(interval); };
   }, []);
-
-  const handleEnter = () => {
-    setPhase('RAMADAN');
-  };
 
   const ramadanProgress = (currentDay / 30) * 100;
 
   return (
-    <main className="min-h-screen font-body bg-[#192375] relative selection:bg-accent selection:text-primary overflow-x-hidden">
+    <main className="min-h-screen font-body bg-[#192375] relative overflow-x-hidden">
       {phase === 'SPLASH' && (
         <div className="min-h-screen flex items-center justify-center bg-[#192375] z-50 fixed inset-0">
           <div className="text-center">
@@ -56,16 +43,12 @@ export default function Home() {
         </div>
       )}
 
-      {phase === 'INTRO' && (
-        <div className="animate-in fade-in duration-1000">
-          <PhaseIntro onEnter={handleEnter} />
-        </div>
-      )}
+      {phase === 'INTRO' && <PhaseIntro onEnter={() => setPhase('RAMADAN')} />}
 
       {phase === 'RAMADAN' && (
         <div className="min-h-screen py-12 flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-700">
           <div className="text-center mb-10 px-4 max-w-2xl mx-auto w-full">
-            <h1 className="text-4xl md:text-6xl font-headline text-accent mb-6 font-bold drop-shadow-lg text-center w-full">Ramdan Mubarak</h1>
+            <h1 className="text-4xl md:text-6xl font-headline text-accent mb-6 font-bold drop-shadow-lg">Ramdan Mubarak</h1>
             <div className="space-y-4">
                <p className="text-2xl text-white/90">اليوم <span className="text-accent font-bold">{currentDay}</span> من الشهر الفضيل</p>
                <div className="px-10 mt-6 max-w-md mx-auto">
@@ -74,13 +57,8 @@ export default function Home() {
                </div>
             </div>
           </div>
-          
           <DuaCard currentDay={currentDay} />
-          
-          <div className="mt-8">
-            <TasbihCounter />
-          </div>
-          
+          <TasbihCounter />
           <div className="mt-20 text-center p-8 opacity-40 border-t border-white/5 max-w-md mx-auto">
             <p className="text-lg">جميع الحقوق محفوظة لمنظومة الحليبي</p>
             <p className="text-xs mt-2 tracking-widest uppercase">Version 1.46.2026 - OS Firas</p>
@@ -90,21 +68,15 @@ export default function Home() {
       )}
 
       {phase === 'EID' && (
-        <div className="animate-in zoom-in duration-1000">
+        <>
           <PhaseEid />
           <AmbiencePlayer />
-        </div>
+        </>
       )}
 
-      {phase === 'CLOSING' && (
-        <div className="animate-in fade-in duration-1000">
-          <PhaseClosing />
-        </div>
-      )}
+      {phase === 'CLOSING' && <PhaseClosing />}
 
-      {/* ShareQRCode is placed at the end to ensure it's on top and globally available */}
       {phase !== 'SPLASH' && <ShareQRCode />}
-      
       <Toaster />
     </main>
   );

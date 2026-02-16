@@ -26,29 +26,18 @@ export function AmbiencePlayer() {
           setPrayerTimes(times);
           setLocationName("موقعك الحالي (تلقائي)");
           setIsLocating(false);
-          
-          toast({
-            title: "تم تحديد الموقع",
-            description: "تم تحديث مواقيت الصلوات الخمس حسب موقعك الحالي بنجاح.",
-          });
+          toast({ title: "تم تحديد الموقع", description: "تم تحديث مواقيت الصلوات الخمس حسب موقعك بنجاح." });
         },
-        (error) => {
-          console.error("Geolocation error:", error);
+        () => {
           const times = calculatePrayerTimes();
           setPrayerTimes(times);
           setLocationName("مكة المكرمة (افتراضي)");
           setIsLocating(false);
-          
-          toast({
-            variant: "destructive",
-            title: "تعذر تحديد الموقع",
-            description: "تم اعتماد توقيت الحرم المكي الشريف كخيار افتراضي.",
-          });
+          toast({ variant: "destructive", title: "تعذر تحديد الموقع", description: "تم اعتماد توقيت الحرم المكي الشريف كخيار افتراضي." });
         }
       );
     } else {
-      const times = calculatePrayerTimes();
-      setPrayerTimes(times);
+      setPrayerTimes(calculatePrayerTimes());
       setLocationName("مكة المكرمة (افتراضي)");
       setIsLocating(false);
     }
@@ -59,43 +48,32 @@ export function AmbiencePlayer() {
 
     const interval = setInterval(() => {
       const now = new Date();
-      const currentH = now.getHours().toString().padStart(2, '0');
-      const currentM = now.getMinutes().toString().padStart(2, '0');
-      const currentTime = `${currentH}:${currentM}`;
+      const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
       
       const prayers = [
         { name: "الفجر", time: prayerTimes.Fajr },
         { name: "الظهر", time: prayerTimes.Dhuhr },
         { name: "العصر", time: prayerTimes.Asr },
         { name: "المغرب", time: prayerTimes.Maghrib },
-        { name: "العشاء", name_ar: "العشاء", time: prayerTimes.Isha },
+        { name: "العشاء", time: prayerTimes.Isha },
       ];
 
-      // تحقق من موعد كل صلاة
       prayers.forEach(prayer => {
         if (isAdhanEnabled && currentTime === prayer.time) {
           if (adhanRef.current && adhanRef.current.paused) {
-             adhanRef.current.play().catch(e => console.log("Adhan play blocked:", e));
-             toast({ 
-               title: `حان الآن وقت صلاة ${prayer.name}`, 
-               description: "أذان الحرم المكي الشريف - تقبل الله منكم.",
-               duration: 20000,
-             });
+             adhanRef.current.play().catch(() => {});
+             toast({ title: `حان الآن وقت صلاة ${prayer.name}`, description: "أذان الحرم المكي الشريف - تقبل الله منكم.", duration: 20000 });
           }
         }
       });
 
-      // تنبيه خاص قبل المغرب بـ 15 دقيقة (للصائمين)
+      // تنبيه المغرب بـ 15 دقيقة
       const [maghribH, maghribM] = prayerTimes.Maghrib.split(':').map(Number);
       const maghribTotalMinutes = maghribH * 60 + maghribM;
       const currentTotalMinutes = now.getHours() * 60 + now.getMinutes();
       
       if (maghribTotalMinutes - currentTotalMinutes === 15) {
-        toast({
-          title: "تذكير صائم 🌙",
-          description: "تبقى 15 دقيقة على أذان المغرب — لا تنسَ دعاء اليوم.",
-          duration: 10000,
-        });
+        toast({ title: "تذكير صائم 🌙", description: "تبقى 15 دقيقة على أذان المغرب — لا تنسَ دعاء اليوم.", duration: 10000 });
       }
     }, 60000);
 
@@ -104,25 +82,14 @@ export function AmbiencePlayer() {
 
   const toggleAmbience = () => {
     if (!audioRef.current) return;
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play().catch(() => {});
-    }
+    if (isPlaying) { audioRef.current.pause(); } else { audioRef.current.play().catch(() => {}); }
     setIsPlaying(!isPlaying);
   };
 
   return (
     <div className="fixed bottom-6 left-6 flex flex-col gap-3 z-50 rtl:left-auto rtl:right-6">
-      <audio
-        ref={audioRef}
-        loop
-        src="https://www.islamcan.com/audio/anasheed/ramadan.mp3" 
-      />
-      <audio
-        ref={adhanRef}
-        src="https://www.islamcan.com/audio/adhan/makkah.mp3" 
-      />
+      <audio ref={audioRef} loop src="https://www.islamcan.com/audio/anasheed/ramadan.mp3" />
+      <audio ref={adhanRef} src="https://www.islamcan.com/audio/adhan/makkah.mp3" />
       
       <div className="bg-primary/90 backdrop-blur-xl p-4 rounded-2xl border border-accent/30 text-accent text-xs mb-2 shadow-2xl animate-in slide-in-from-bottom-4">
         <div className="flex items-center gap-2 mb-2 font-bold">
@@ -130,45 +97,16 @@ export function AmbiencePlayer() {
           <span>{locationName}</span>
         </div>
         <div className="grid grid-cols-2 gap-2 text-white/90">
-          <div className="flex items-center gap-1">
-            <span className="text-accent">الفجر:</span>
-            <span>{prayerTimes?.Fajr || "--:--"}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="text-accent">الظهر:</span>
-            <span>{prayerTimes?.Dhuhr || "--:--"}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="text-accent">العصر:</span>
-            <span>{prayerTimes?.Asr || "--:--"}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="text-accent font-bold">المغرب:</span>
-            <span className="font-bold text-accent">{prayerTimes?.Maghrib || "--:--"}</span>
-          </div>
+          <div className="flex items-center gap-1"><span>الفجر:</span> <span>{prayerTimes?.Fajr || "--:--"}</span></div>
+          <div className="flex items-center gap-1"><span>الظهر:</span> <span>{prayerTimes?.Dhuhr || "--:--"}</span></div>
+          <div className="flex items-center gap-1"><span>العصر:</span> <span>{prayerTimes?.Asr || "--:--"}</span></div>
+          <div className="flex items-center gap-1 text-accent font-bold"><span>المغرب:</span> <span>{prayerTimes?.Maghrib || "--:--"}</span></div>
         </div>
       </div>
 
       <div className="flex gap-3">
-        <Button
-          onClick={toggleAmbience}
-          variant="secondary"
-          size="icon"
-          className="rounded-full shadow-2xl bg-accent text-primary hover:bg-accent/90 w-14 h-14"
-          title="أجواء روحانية"
-        >
-          <Music className={isPlaying ? "animate-pulse" : ""} size={24} />
-        </Button>
-
-        <Button
-          onClick={() => setIsAdhanEnabled(!isAdhanEnabled)}
-          variant="secondary"
-          size="icon"
-          className="rounded-full shadow-2xl bg-accent text-primary hover:bg-accent/90 w-14 h-14"
-          title={isAdhanEnabled ? "إيقاف الأذان" : "تشغيل الأذان"}
-        >
-          {isAdhanEnabled ? <Volume2 size={24} /> : <VolumeX size={24} />}
-        </Button>
+        <Button onClick={toggleAmbience} variant="secondary" size="icon" className="rounded-full shadow-2xl bg-accent text-primary w-14 h-14"><Music className={isPlaying ? "animate-pulse" : ""} size={24} /></Button>
+        <Button onClick={() => setIsAdhanEnabled(!isAdhanEnabled)} variant="secondary" size="icon" className="rounded-full shadow-2xl bg-accent text-primary w-14 h-14">{isAdhanEnabled ? <Volume2 size={24} /> : <VolumeX size={24} />}</Button>
       </div>
     </div>
   );
