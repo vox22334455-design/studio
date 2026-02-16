@@ -59,6 +59,7 @@ export default function Home() {
       {phase === 'INTRO' && (
         <div className="animate-in fade-in duration-1000">
           <PhaseIntro onEnter={handleEnter} />
+          <ShareQRCode />
         </div>
       )}
 
