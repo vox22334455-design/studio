@@ -1,3 +1,22 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "ramadan-moon",
+      "description": "Golden crescent moon with stars",
+      "imageUrl": "https://images.unsplash.com/photo-1672851976807-b49793e73626?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxnb2xkZW4lMjBjcmVzY2VudCUyMG1vb258ZW58MHx8fHwxNzcxMjYzMDc5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "golden crescent moon"
+    },
+    {
+      "id": "eid-celebration",
+      "description": "Festive Eid decorations and lights",
+      "imageUrl": "https://images.unsplash.com/photo-1729501055906-866167477c24?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxlaWQlMjBjZWxlYnJhdGlvbiUyMGxpZ2h0c3xlbnwwfHx8fDE3NzEyNjMwNzl8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "eid celebration lights"
+    },
+    {
+      "id": "islamic-pattern",
+      "description": "Elegant Islamic geometric pattern",
+      "imageUrl": "https://images.unsplash.com/photo-1761639935398-b3f808661802?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxpc2xhbWljJTIwcGF0dGVybiUyMGdvbGR8ZW58MHx8fHwxNzcxMjYzMDc5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "islamic pattern gold"
+    }
+  ]
 }
