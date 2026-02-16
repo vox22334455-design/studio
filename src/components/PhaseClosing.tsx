@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Mail, Globe, BrainCircuit } from "lucide-react";
+import { Mail, Globe, BrainCircuit, Rocket } from "lucide-react";
 import { elHeliebiVersePromotionGeneration } from "@/ai/flows/el-heliebi-verse-promotion-generation";
 
 export function PhaseClosing() {
@@ -14,50 +14,65 @@ export function PhaseClosing() {
         const text = await elHeliebiVersePromotionGeneration();
         setPromoText(text);
       } catch (e) {
-        // Fallback text if AI flow fails
-        setPromoText(`قريباً بإذن الله... إطلاق تطبيق EL-Heliebi Live.`);
+        setPromoText(`قريباً بإذن الله... إطلاق تطبيق EL-Heliebi Live. أول ذكاء اصطناعي متطور بالكامل من إنتاج عربي.`);
       }
     };
     fetchPromo();
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-slate-900 text-white selection:bg-accent selection:text-primary">
-      <div className="max-w-4xl space-y-12">
-        <div className="animate-pulse flex flex-col items-center">
-          <BrainCircuit className="w-20 h-20 text-accent mb-4" />
-          <h2 className="text-3xl font-headline tracking-widest text-accent uppercase">Coming Soon</h2>
+    <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-[#0a0f3d] text-white selection:bg-accent selection:text-primary relative overflow-hidden">
+      {/* Background Decorative Elements */}
+      <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent rounded-full blur-[150px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-600 rounded-full blur-[150px]" />
+      </div>
+
+      <div className="max-w-4xl z-10 space-y-12">
+        <div className="flex flex-col items-center gap-4">
+          <div className="p-4 bg-accent/10 rounded-full border border-accent/20 animate-bounce">
+            <Rocket className="w-12 h-12 text-accent" />
+          </div>
+          <h2 className="text-2xl font-headline tracking-widest text-accent/80 uppercase">قريباً بإذن الله</h2>
         </div>
 
-        <div className="bg-white/5 p-10 rounded-3xl border border-accent/20 space-y-8 backdrop-blur-xl">
-          <h1 className="text-5xl font-bold font-headline text-accent">EL-Heliebi Verse</h1>
+        <div className="bg-white/5 p-12 rounded-[40px] border border-accent/20 space-y-10 backdrop-blur-2xl shadow-2xl">
+          <div className="space-y-2">
+            <h1 className="text-6xl font-bold font-headline text-accent">EL-Heliebi Live</h1>
+            <p className="text-accent/60 tracking-[0.3em] uppercase text-sm">Artificial Intelligence . Arabic Vision</p>
+          </div>
           
-          <div className="arabic-text text-2xl md:text-3xl leading-relaxed text-white/90 min-h-[200px]">
+          <div className="arabic-text text-2xl md:text-3xl leading-relaxed text-white/95 font-body">
             {promoText ? (
               <div dangerouslySetInnerHTML={{ __html: promoText.replace(/\n/g, '<br/>') }} />
             ) : (
-              <p>جاري تحميل الرؤية المستقبلية...</p>
+              <p className="animate-pulse">جاري تحميل الرؤية المستقبلية للمنظومة...</p>
             )}
+          </div>
+
+          <div className="pt-8 border-t border-white/10">
+            <h3 className="text-3xl font-headline text-accent mb-4">EL-Heliebi Verse</h3>
+            <p className="text-xl text-white/70">أكبر منصة رقمية عالمية متكاملة تجمع بين الذكاء الاصطناعي والتقنيات الحديثة.</p>
           </div>
         </div>
 
         <div className="space-y-6">
-          <p className="text-xl">للمهتمين بالمشاركة في المشروع العالمي:</p>
+          <p className="text-xl text-white/60">للمشاركة في هذا المشروع العالمي:</p>
           <a
             href="mailto:elheliebi@outlook.sa"
-            className="inline-flex items-center gap-3 bg-accent text-primary font-bold px-8 py-4 rounded-full text-xl transition-transform hover:scale-105"
+            className="inline-flex items-center gap-4 bg-accent text-primary font-bold px-10 py-5 rounded-full text-xl transition-all hover:scale-110 hover:shadow-[0_0_30px_rgba(212,162,78,0.4)]"
           >
             <Mail size={24} />
             elheliebi@outlook.sa
           </a>
         </div>
 
-        <div className="pt-16 border-t border-white/10 w-full opacity-60 flex flex-col items-center gap-2">
-          <p className="text-sm">جميع الحقوق محفوظة لمنظومة الحليبي فرس OS</p>
-          <div className="flex gap-4">
-            <Globe size={18} />
-            <span>Industrial Vision Global Presence</span>
+        <div className="pt-20 opacity-50 flex flex-col items-center gap-3">
+          <div className="flex items-center gap-3 text-lg">
+             < Globe size={20} className="text-accent" />
+             <span>Industrial Vision … Global Presence</span>
           </div>
+          <p className="text-xs tracking-widest uppercase">جميع الحقوق محفوظة لمنظومة الحليبي فرس OS © 2025</p>
         </div>
       </div>
     </div>

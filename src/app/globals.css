@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -23,17 +24,7 @@
     --border: 225 35% 85%;
     --input: 225 35% 85%;
     --ring: 233 65% 28%;
-    --radius: 0.75rem;
-  }
-  .dark {
-    --background: 233 65% 10%;
-    --foreground: 225 35% 93%;
-    --card: 233 65% 15%;
-    --card-foreground: 225 35% 93%;
-    --primary: 37 62% 57%;
-    --primary-foreground: 233 65% 10%;
-    --accent: 37 62% 57%;
-    --accent-foreground: 233 65% 10%;
+    --radius: 1rem;
   }
 }
 
@@ -44,7 +35,7 @@
   body {
     @apply bg-background text-foreground font-body antialiased;
     min-height: 100vh;
-    background: linear-gradient(to bottom, #192375, #121a5a);
+    background: linear-gradient(to bottom, #192375, #0a0f3d);
     color: white;
   }
   h1, h2, h3, h4, h5, h6 {
@@ -55,25 +46,40 @@
 .islamic-border {
   border: 4px double #D4A24E;
   position: relative;
+  box-shadow: 0 0 40px rgba(0,0,0,0.3);
 }
 
-.islamic-border::before, .islamic-border::after {
-  content: "✨";
+.islamic-border::before {
+  content: "☪";
   position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #192375;
+  padding: 0 10px;
   color: #D4A24E;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
 }
 
 .star-animation {
-  animation: twinkle 3s infinite ease-in-out;
+  animation: twinkle 4s infinite ease-in-out;
 }
 
 @keyframes twinkle {
-  0%, 100% { opacity: 0.3; transform: scale(0.8); }
-  50% { opacity: 1; transform: scale(1.1); }
+  0%, 100% { opacity: 0.2; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
 }
 
 .arabic-text {
   direction: rtl;
   font-family: 'Amiri', serif;
+}
+
+.font-headline {
+  font-family: 'Alegreya', serif;
+}
+
+/* تحسينات لبطاقات الدعاء */
+.dua-card-gradient {
+  background: linear-gradient(135deg, rgba(25, 35, 117, 0.95) 0%, rgba(18, 26, 90, 0.95) 100%);
 }

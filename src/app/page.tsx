@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -8,15 +9,12 @@ import { PhaseEid } from "@/components/PhaseEid";
 import { PhaseClosing } from "@/components/PhaseClosing";
 import { AmbiencePlayer } from "@/components/AmbiencePlayer";
 import { TasbihCounter } from "@/components/TasbihCounter";
-import { useToast } from "@/hooks/use-toast";
-import { Bell } from "lucide-react";
 import { Toaster } from "@/components/ui/toaster";
 import { Progress } from "@/components/ui/progress";
 
 export default function Home() {
   const [phase, setPhase] = useState<AppPhase | 'SPLASH'>('SPLASH');
   const [currentDay, setCurrentDay] = useState(1);
-  const { toast } = useToast();
 
   const updateAppData = () => {
     const now = new Date();
@@ -25,31 +23,25 @@ export default function Home() {
     
     setCurrentDay(day);
     
-    // Auto-transition to RAMADAN if it's currently Ramadan
-    if (phase === 'SPLASH' || (phase === 'INTRO' && detectedPhase === 'RAMADAN')) {
+    // إذا كان رمضان قد بدأ فعلاً، نتخطى شاشة البداية في المرات القادمة
+    if (phase === 'SPLASH') {
        setPhase(detectedPhase);
     }
   };
 
   useEffect(() => {
-    // Initial update
-    updateAppData();
-    
-    const splashTimer = setTimeout(() => {
-      if (phase === 'SPLASH') {
-        const now = new Date();
-        setPhase(getCurrentPhase(now));
-      }
+    const timer = setTimeout(() => {
+      updateAppData();
     }, 1500);
 
-    // Auto-refresh every 10 minutes to keep the day updated automatically
+    // التحديث التلقائي كل 10 دقائق لليوم والمرحلة
     const interval = setInterval(updateAppData, 600000);
 
     return () => {
-      clearTimeout(splashTimer);
+      clearTimeout(timer);
       clearInterval(interval);
     };
-  }, [phase]);
+  }, []);
 
   const handleEnter = () => {
     setPhase('RAMADAN');
@@ -58,56 +50,56 @@ export default function Home() {
   const ramadanProgress = (currentDay / 30) * 100;
 
   return (
-    <main className="min-h-screen font-body bg-[#192375] relative selection:bg-accent selection:text-primary">
+    <main className="min-h-screen font-body bg-[#192375] relative selection:bg-accent selection:text-primary overflow-x-hidden">
       {phase === 'SPLASH' && (
-        <div className="min-h-screen flex items-center justify-center bg-[#192375]">
+        <div className="min-h-screen flex items-center justify-center bg-[#192375] z-50 fixed inset-0">
           <div className="text-center">
-            <div className="w-16 h-16 border-4 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-accent animate-pulse text-lg">اللهم بلغنا رمضان...</p>
+            <div className="w-20 h-20 border-4 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-6" />
+            <h2 className="text-accent animate-pulse text-2xl font-headline">اللهم بلغنا رمضان...</h2>
           </div>
         </div>
       )}
 
-      {(phase === 'INTRO' || phase === 'RAMADAN') && phase !== 'SPLASH' && (
+      {phase === 'INTRO' && (
         <div className="animate-in fade-in duration-1000">
-          {phase === 'INTRO' ? (
-             <PhaseIntro onEnter={handleEnter} />
-          ) : (
-            <div className="min-h-screen py-12 flex flex-col">
-              <div className="text-center mb-8 px-4 max-w-2xl mx-auto w-full">
-                <h1 className="text-4xl md:text-5xl font-headline text-accent mb-4">أدعية رمضان المبارك</h1>
-                <div className="space-y-2">
-                   <p className="text-xl opacity-90">اليوم {currentDay} من الشهر الفضيل</p>
-                   <div className="px-8 mt-4">
-                      <Progress value={ramadanProgress} className="h-2 bg-white/10" />
-                      <p className="text-xs text-accent/60 mt-2">انقضى {Math.floor(ramadanProgress)}% من رمضان</p>
-                   </div>
-                </div>
-              </div>
-              
-              <DuaCard currentDay={currentDay} />
-              
-              <TasbihCounter />
-              
-              <div className="mt-16 text-center p-8 opacity-60">
-                <p>جميع الحقوق محفوظة لمنظومة الحليبي</p>
-                <p className="text-xs mt-2">نسخة رمضان 1446هـ - 2025م</p>
-              </div>
-              <AmbiencePlayer />
+          <PhaseIntro onEnter={handleEnter} />
+        </div>
+      )}
+
+      {phase === 'RAMADAN' && (
+        <div className="min-h-screen py-12 flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <div className="text-center mb-10 px-4 max-w-2xl mx-auto w-full">
+            <h1 className="text-4xl md:text-6xl font-headline text-accent mb-6 font-bold drop-shadow-lg">أدعية رمضان المبارك</h1>
+            <div className="space-y-4">
+               <p className="text-2xl text-white/90">اليوم <span className="text-accent font-bold">{currentDay}</span> من الشهر الفضيل</p>
+               <div className="px-10 mt-6">
+                  <Progress value={ramadanProgress} className="h-3 bg-white/10 border border-white/5" />
+                  <p className="text-sm text-accent/70 mt-3 font-medium">انقضى {Math.floor(ramadanProgress)}% من رمضان</p>
+               </div>
             </div>
-          )}
+          </div>
+          
+          <DuaCard currentDay={currentDay} />
+          
+          <TasbihCounter />
+          
+          <div className="mt-20 text-center p-8 opacity-40 border-t border-white/5 max-w-md mx-auto">
+            <p className="text-lg">جميع الحقوق محفوظة لمنظومة الحليبي</p>
+            <p className="text-xs mt-2 tracking-widest uppercase">Version 1.46.2025 - OS Firas</p>
+          </div>
+          <AmbiencePlayer />
         </div>
       )}
 
       {phase === 'EID' && (
-        <div className="animate-in slide-in-from-bottom duration-1000">
+        <div className="animate-in zoom-in duration-1000">
           <PhaseEid />
           <AmbiencePlayer />
         </div>
       )}
 
       {phase === 'CLOSING' && (
-        <div className="animate-in zoom-in duration-1000">
+        <div className="animate-in fade-in duration-1000">
           <PhaseClosing />
         </div>
       )}

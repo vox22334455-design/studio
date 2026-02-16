@@ -1,54 +1,59 @@
 
 /**
- * Simplified logic for Ramadan 2025.
- * Ramadan 2025 starts approx March 1, 2025.
- * Eid starts approx March 31, 2025.
- * This is a simplified mock for the application logic.
+ * نظام إدارة الوقت والتاريخ لتطبيق رمضان 2025
+ * يحدد مراحل التطبيق تلقائياً بناءً على التاريخ الحالي.
  */
 
 export type AppPhase = 'INTRO' | 'RAMADAN' | 'EID' | 'CLOSING';
 
 export function getCurrentPhase(date: Date): AppPhase {
   const year = date.getFullYear();
-  const month = date.getMonth(); // 0-indexed
+  const month = date.getMonth(); // 0-indexed (2 is March)
   const day = date.getDate();
 
-  // For testing purposes, you can manually override this logic.
-  // We'll use March 2025 as our Ramadan month.
-  
-  // If before March 2025
+  // تحديد المراحل لعام 2025 (افتراض أن رمضان يبدأ 1 مارس)
+  // قبل مارس 2025
   if (year < 2025 || (year === 2025 && month < 2)) {
     return 'INTRO';
   }
 
-  // Ramadan: March 1 - March 30, 2025
+  // شهر رمضان: من 1 مارس إلى 30 مارس 2025
   if (year === 2025 && month === 2 && day <= 30) {
     return 'RAMADAN';
   }
 
-  // Eid Day 1: March 31, 2025
+  // يوم العيد الأول: 31 مارس 2025
   if (year === 2025 && month === 2 && day === 31) {
     return 'EID';
   }
 
-  // After Eid Day 1 (Day 2 and onwards)
+  // من اليوم الثاني للعيد فصاعداً: مرحلة الإغلاق والرؤية المستقبلية
   return 'CLOSING';
 }
 
 export function getRamadanDay(date: Date): number {
-  if (date.getMonth() === 2 && date.getFullYear() === 2025) {
-    return date.getDate();
+  if (date.getFullYear() === 2025 && date.getMonth() === 2) {
+    const day = date.getDate();
+    return day > 30 ? 30 : day;
   }
   return 1;
 }
 
-export function getPrayerTimes(lat: number, lon: number) {
-  // Mock prayer times calculation based on a common middle-east lat/lon
+export interface PrayerTimes {
+  Fajr: string;
+  Dhuhr: string;
+  Asr: string;
+  Maghrib: string;
+  Isha: string;
+}
+
+export function calculatePrayerTimes(lat?: number, lon?: number): PrayerTimes {
+  // محاكاة لمواقيت الصلاة - يمكن ربطها بـ API خارجي في الإنتاج
   return {
-    Fajr: "04:50",
-    Dhuhr: "12:15",
-    Asr: "15:40",
-    Maghrib: "18:25",
-    Isha: "19:55"
+    Fajr: "04:52",
+    Dhuhr: "12:14",
+    Asr: "15:42",
+    Maghrib: "18:24",
+    Isha: "19:54"
   };
 }
