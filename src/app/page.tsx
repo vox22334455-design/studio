@@ -9,6 +9,7 @@ import { PhaseEid } from "@/components/PhaseEid";
 import { PhaseClosing } from "@/components/PhaseClosing";
 import { AmbiencePlayer } from "@/components/AmbiencePlayer";
 import { TasbihCounter } from "@/components/TasbihCounter";
+import { ShareQRCode } from "@/components/ShareQRCode";
 import { Toaster } from "@/components/ui/toaster";
 import { Progress } from "@/components/ui/progress";
 
@@ -83,6 +84,7 @@ export default function Home() {
             <p className="text-xs mt-2 tracking-widest uppercase">Version 1.46.2026 - OS Firas</p>
           </div>
           <AmbiencePlayer />
+          <ShareQRCode />
         </div>
       )}
 
@@ -90,6 +92,7 @@ export default function Home() {
         <div className="animate-in zoom-in duration-1000">
           <PhaseEid />
           <AmbiencePlayer />
+          <ShareQRCode />
         </div>
       )}
 
