@@ -5,7 +5,7 @@
 
 export type AppPhase = 'INTRO' | 'RAMADAN' | 'EID' | 'CLOSING';
 
-// تواريخ رمضان المتوقعة لعام 2026
+// تواريخ رمضان المتوقعة لعام 2026 فلكياً
 const RAMADAN_START_2026 = new Date(2026, 1, 18); // 18 فبراير 2026
 const EID_START_2026 = new Date(2026, 2, 20);    // 20 مارس 2026 (بداية العيد)
 const CLOSING_START_2026 = new Date(2026, 2, 22); // بعد ثاني أيام العيد
